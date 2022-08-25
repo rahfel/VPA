@@ -48,30 +48,3 @@ mv $basefile_name.results /rds/general/user/rf1116/home/LDSC_2022/TB_DOWN/Result
 done
 
 
-
-library(data.table)
-library(ggplot2)
-library(cowplot)
-
-FOLDERS=list.files()
-count=0
-for(FOLD in FOLDERS){
-	All.files=list.files(path=FOLD,pattern=".results")
-	for(file in All.files){
-		data=fread(sprintf("%s/%s",FOLD,file))
-		tmp=data[1,]
-		tmp$FOLD=FOLD
-		tmp$file=file
-		if(count==0){
-			R.Table=tmp
-		}else{
-			R.Table=rbind(R.Table,tmp)
-		}
-		count=count+1
-	}
-}
-R.Table$ct=gsub("_\\w[^_]*.results","",R.Table$file,perl=TRUE)
-R.Table$ct=gsub(".results","",R.Table$file,perl=TRUE)
-R.Table$ct=gsub(paste(FOLDERS,collapse="|"),"",R.Table$ct)
-R.Table$ct=gsub("_$","",R.Table$ct)
-ggplot(R.Table) + geom_bar(aes(x=ct,y=Enrichment_p,fill=FOLD),stat="identity",position="dodge") + scale_y_log10() + coord_flip() + theme_cowplot() + geom_hline(yintercept=0.05/dim(R.Table)[1])

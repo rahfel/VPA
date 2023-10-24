@@ -1,12 +1,8 @@
 
 ######## Scripts to run differential expression analysis ############
 
-load("RData")
+load("AUS.RData")
 colnames(mat_merged)
-
-mat_merged=mat_merged[,-c(10,15)]
-GAERS.val2=GAERS.val[-4]
-NEC.val2=NEC.val[-2]
 
 Table2=read.csv("S.D.Genes.csv",sep=",",row.names=1)
 
